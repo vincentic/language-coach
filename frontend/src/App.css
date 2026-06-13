@@ -1,0 +1,149 @@
+:root {
+  --primary-color: #2D3748;
+  --primary-hover: #1A202C;
+  --secondary-color: #68D391;
+  --accent-color: #F6E05E;
+  --background: #FDFCF8;
+  --surface: #FFFFFF;
+  --text-primary: #2D3748;
+  --text-secondary: #718096;
+  --border: #E2E8F0;
+  --header-height: 70px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  background-color: var(--background);
+  color: var(--text-primary);
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Tab Header */
+.tab-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  height: var(--header-height);
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.tab-header .logo h2 {
+  font-size: 18px;
+  color: var(--primary-color);
+  font-weight: 700;
+}
+
+.tab-nav {
+  display: flex;
+  gap: 8px;
+}
+
+.tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  transition: all 0.2s;
+}
+
+.tab-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.tab-btn:hover {
+  background: var(--background);
+  color: var(--text-primary);
+}
+
+.tab-btn.active {
+  background: var(--secondary-color);
+  color: white;
+}
+
+/* Main Content */
+.main-content {
+  flex: 1;
+  padding: 24px;
+  padding-bottom: 100px;
+}
+
+/* Bottom Tab Bar (Mobile) */
+.bottom-tabs {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  padding: 8px 16px;
+  justify-content: space-around;
+  z-index: 100;
+}
+
+.bottom-tabs button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 16px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: var(--text-secondary);
+  font-size: 12px;
+  transition: all 0.2s;
+}
+
+.bottom-tabs button svg {
+  width: 24px;
+  height: 24px;
+}
+
+.bottom-tabs button.active {
+  color: var(--secondary-color);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .tab-nav {
+    display: none;
+  }
+
+  .bottom-tabs {
+    display: flex;
+  }
+
+  .main-content {
+    padding: 16px;
+    padding-bottom: 100px;
+  }
+
+  .tab-header {
+    padding: 0 16px;
+  }
+}
