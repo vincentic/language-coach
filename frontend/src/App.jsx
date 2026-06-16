@@ -3,6 +3,7 @@ import './App.css'
 
 import PracticeMode from './pages/PracticeMode'
 import KnowledgeGraph from './components/knowledge/KnowledgeGraph'
+import NetworkArchitecture from './components/knowledge/NetworkArchitecture'
 
 function App() {
   const [activeTab, setActiveTab] = useState('practice')
@@ -30,6 +31,12 @@ function App() {
         >
           🧠 知识网络
         </button>
+        <button
+          className={`tab-btn ${activeTab === 'network' ? 'active' : ''}`}
+          onClick={() => setActiveTab('network')}
+        >
+          🕸️ 网络架构
+        </button>
       </nav>
 
       {/* Main Content Area */}
@@ -39,6 +46,9 @@ function App() {
         )}
         {activeTab === 'knowledge' && (
           <KnowledgeGraph />
+        )}
+        {activeTab === 'network' && (
+          <NetworkArchitecture />
         )}
       </main>
     </div>
