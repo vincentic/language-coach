@@ -880,3 +880,118 @@
   cursor: pointer;
 }
 .close-search:hover { background: #444; }
+
+/* Story Button */
+.story-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  margin-top: 12px;
+}
+.story-btn:hover {
+  background: linear-gradient(135deg, #5a6fd6 0%, #6a3f96 100%);
+}
+.story-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Story Panel */
+.story-panel {
+  background: #1a1a2e;
+  border: 1px solid #333;
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+  max-height: 800px;
+  overflow-y: auto;
+}
+.story-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #333;
+}
+.story-header h3 {
+  margin: 0;
+  font-size: 1.3rem;
+  color: #fff;
+}
+.story-content {
+  line-height: 1.8;
+  color: #ddd;
+}
+.story-content h2 {
+  font-size: 1.4rem;
+  color: #7c4dff;
+  margin: 24px 0 12px;
+}
+.story-content h3 {
+  font-size: 1.2rem;
+  color: #4fc3f7;
+  margin: 20px 0 10px;
+}
+.story-content h4 {
+  font-size: 1rem;
+  color: #66bb6a;
+  margin: 16px 0 8px;
+}
+.story-content p {
+  margin: 8px 0;
+  font-size: 0.95rem;
+}
+
+/* Story Analysis */
+.story-analysis {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #333;
+}
+.story-analysis h4 {
+  color: #888;
+  margin-bottom: 16px;
+}
+.analysis-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.analysis-item {
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 8px;
+}
+.analysis-label {
+  font-size: 0.8rem;
+  color: #888;
+  margin-bottom: 4px;
+}
+.analysis-value {
+  font-size: 1.1rem;
+  color: #4fc3f7;
+  font-weight: 600;
+}
+.keywords-section {
+  margin-top: 16px;
+}
+.keywords-section h5 {
+  color: #aaa;
+  margin-bottom: 8px;
+}
+.keywords-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.keyword-tag {
+  padding: 4px 10px;
+  background: rgba(124, 77, 255, 0.15);
+  border: 1px solid rgba(124, 77, 255, 0.3);
+  border-radius: 12px;
+  font-size: 0.8rem;
+  color: #b388ff;
+}

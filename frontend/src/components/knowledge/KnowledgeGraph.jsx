@@ -405,6 +405,11 @@ export default function KnowledgeGraph() {
   const [extractStopped, setExtractStopped] = useState(false);
   const extractAbortRef = useRef(null);
 
+  // Persona story states
+  const [personaStory, setPersonaStory] = useState(null);
+  const [generatingStory, setGeneratingStory] = useState(false);
+  const [showStory, setShowStory] = useState(false);
+
   // Load graph data
   const loadGraph = () => {
     fetch(`${API_BASE}/graph`)
@@ -561,6 +566,29 @@ export default function KnowledgeGraph() {
     const res = await fetch(`${API_BASE}/search?q=${encodeURIComponent(searchQuery)}`);
     const data = await res.json();
     setSearchResults(data);
+  };
+
+  // Generate persona story
+  const handleGenerateStory = async () => {
+    setGeneratingStory(true);
+    setMessage('');
+    try {
+      const res = await fetch(`${API_BASE}/persona/story?sample_size=50`, {
+        method: 'POST'
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setPersonaStory(data);
+        setShowStory(true);
+        setMessage('✅ 人物画像故事生成成功！');
+      } else {
+        setMessage(`❌ 生成失败: ${data.detail || '未知错误'}`);
+      }
+    } catch (err) {
+      setMessage(`❌ 生成失败: ${err.message}`);
+    } finally {
+      setGeneratingStory(false);
+    }
   };
 
   return (
@@ -864,6 +892,69 @@ export default function KnowledgeGraph() {
               ))}
             </div>
           </div>
+
+          {/* Persona Story Button */}
+          <div className="report-section">
+            <h4>📖 人物画像故事</h4>
+            <p className="section-desc">基于你的提问记录，AI 将为你生成一个人物画像故事</p>
+            <button
+              className="action-btn story-btn"
+              onClick={handleGenerateStory}
+              disabled={generatingStory || !stats?.total_records}
+            >
+              {generatingStory ? '✨ 生成中...' : '✨ 生成人物故事'}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Persona Story Panel */}
+      {showStory && personaStory && (
+        <div className="story-panel">
+          <div className="story-header">
+            <h3>📖 你的人物画像故事</h3>
+            <button className="close-btn" onClick={() => setShowStory(false)}>×</button>
+          </div>
+          <div className="story-content">
+            {personaStory.story.split('\n').map((line, i) => {
+              if (line.startsWith('# ')) {
+                return <h2 key={i}>{line.slice(2)}</h2>;
+              } else if (line.startsWith('## ')) {
+                return <h3 key={i}>{line.slice(3)}</h3>;
+              } else if (line.startsWith('### ')) {
+                return <h4 key={i}>{line.slice(4)}</h4>;
+              } else if (line.trim() === '') {
+                return <br key={i} />;
+              } else {
+                return <p key={i}>{line}</p>;
+              }
+            })}
+          </div>
+          {personaStory.analysis && (
+            <div className="story-analysis">
+              <h4>📊 分析数据</h4>
+              <div className="analysis-grid">
+                <div className="analysis-item">
+                  <span className="analysis-label">分析样本</span>
+                  <span className="analysis-value">{personaStory.analysis.sample_size} 条</span>
+                </div>
+                <div className="analysis-item">
+                  <span className="analysis-label">总记录</span>
+                  <span className="analysis-value">{personaStory.analysis.total_records} 条</span>
+                </div>
+              </div>
+              {personaStory.analysis.top_keywords?.length > 0 && (
+                <div className="keywords-section">
+                  <h5>高频关键词</h5>
+                  <div className="keywords-cloud">
+                    {personaStory.analysis.top_keywords.slice(0, 10).map((kw, i) => (
+                      <span key={i} className="keyword-tag">{kw[0]} ({kw[1]})</span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       )}
 
