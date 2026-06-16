@@ -2,8 +2,10 @@ import { useState } from 'react'
 import './App.css'
 
 import PracticeMode from './pages/PracticeMode'
+import KnowledgeGraph from './components/knowledge/KnowledgeGraph'
 
 function App() {
+  const [activeTab, setActiveTab] = useState('practice')
   const [practiceData, setPracticeData] = useState(null)
 
   const navigateTo = (_page, data = null) => {
@@ -14,9 +16,30 @@ function App() {
 
   return (
     <div className="app">
+      {/* Tab Navigation */}
+      <nav className="tab-nav">
+        <button
+          className={`tab-btn ${activeTab === 'practice' ? 'active' : ''}`}
+          onClick={() => setActiveTab('practice')}
+        >
+          🎯 练习
+        </button>
+        <button
+          className={`tab-btn ${activeTab === 'knowledge' ? 'active' : ''}`}
+          onClick={() => setActiveTab('knowledge')}
+        >
+          🧠 知识网络
+        </button>
+      </nav>
+
       {/* Main Content Area */}
       <main className="main-content">
-        <PracticeMode onNavigate={navigateTo} initialSentence={practiceData?.sentence} />
+        {activeTab === 'practice' && (
+          <PracticeMode onNavigate={navigateTo} initialSentence={practiceData?.sentence} />
+        )}
+        {activeTab === 'knowledge' && (
+          <KnowledgeGraph />
+        )}
       </main>
     </div>
   )
