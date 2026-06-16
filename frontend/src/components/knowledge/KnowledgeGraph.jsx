@@ -590,6 +590,20 @@ export default function KnowledgeGraph() {
             <span className="stat-value">{Object.keys(stats.sources || {}).length}</span>
             <span className="stat-label">数据来源</span>
           </div>
+          {report?.summary && (
+            <div className="stat-item processed-stat">
+              <div className="processed-bar">
+                <div
+                  className="processed-fill"
+                  style={{width: `${report.summary.progress_percent}%`}}
+                ></div>
+              </div>
+              <span className="stat-value processed-value">
+                {report.summary.processed}/{report.summary.total_records}
+              </span>
+              <span className="stat-label">已处理 ({report.summary.progress_percent}%)</span>
+            </div>
+          )}
         </div>
       )}
 
