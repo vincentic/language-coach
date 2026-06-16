@@ -397,6 +397,14 @@ export default function KnowledgeGraph() {
   const [message, setMessage] = useState('');
   const [showReport, setShowReport] = useState(false);
 
+  // Extract control states
+  const [extractLimit, setExtractLimit] = useState(10);
+  const [extractedCount, setExtractedCount] = useState(0);
+  const [extractProgress, setExtractProgress] = useState(0);
+  const [extractPaused, setExtractPaused] = useState(false);
+  const [extractStopped, setExtractStopped] = useState(false);
+  const extractAbortRef = useRef(null);
+
   // Load graph data
   const loadGraph = () => {
     fetch(`${API_BASE}/graph`)
@@ -486,23 +494,50 @@ export default function KnowledgeGraph() {
     }
   };
 
-  // Run batch extraction (10 at a time)
-  const [remaining, setRemaining] = useState(null);
-
-  const handleExtractBatch = async () => {
+  // Extract control functions
+  const handleExtractStart = async () => {
     setExtracting(true);
+    setExtractPaused(false);
+    setExtractStopped(false);
+    setExtractedCount(0);
+    setExtractProgress(0);
     setMessage('');
+
+    const limit = extractLimit || 999999; // 0 means all
+    let processed = 0;
+
     try {
-      const res = await fetch(`${API_BASE}/extract/batch?limit=10`, {
-        method: 'POST'
-      });
-      const data = await res.json();
-      setRemaining(data.remaining);
-      if (data.processed === 0) {
-        setMessage(`✅ ${data.message}`);
-      } else {
-        setMessage(`✅ 已处理 ${data.processed} 条，剩余 ${data.remaining} 条`);
+      while (processed < limit && !extractStopped && !extractPaused) {
+        const batchLimit = Math.min(10, limit - processed);
+        const res = await fetch(`${API_BASE}/extract/batch?limit=${batchLimit}`, {
+          method: 'POST'
+        });
+        const data = await res.json();
+
+        if (data.processed === 0) {
+          setMessage(`✅ ${data.message || '所有记录已处理完成！'}`);
+          break;
+        }
+
+        processed += data.processed;
+        setExtractedCount(processed);
+        setExtractProgress(Math.min(100, (processed / limit) * 100));
+
+        if (data.remaining === 0) {
+          setMessage(`✅ 全部处理完成！共处理 ${processed} 条`);
+          break;
+        }
+
+        // Small delay between batches
+        await new Promise(resolve => setTimeout(resolve, 500));
       }
+
+      if (extractPaused) {
+        setMessage(`⏸️ 已暂停，已处理 ${processed} 条`);
+      } else if (extractStopped) {
+        setMessage(`⏹️ 已终止，已处理 ${processed} 条`);
+      }
+
       loadGraph();
     } catch (err) {
       setMessage(`❌ 提取失败: ${err.message}`);
@@ -511,24 +546,13 @@ export default function KnowledgeGraph() {
     }
   };
 
-  // Run full extraction
-  const handleExtractAll = async () => {
-    setExtracting(true);
-    setMessage('');
-    try {
-      const res = await fetch(`${API_BASE}/extract`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({})
-      });
-      const data = await res.json();
-      setMessage(`✅ 处理 ${data.processed} 条记录，图谱已更新`);
-      loadGraph();
-    } catch (err) {
-      setMessage(`❌ 提取失败: ${err.message}`);
-    } finally {
-      setExtracting(false);
-    }
+  const handleExtractPause = () => {
+    setExtractPaused(true);
+  };
+
+  const handleExtractStop = () => {
+    setExtractStopped(true);
+    setExtractPaused(false);
   };
 
   // Search
@@ -831,30 +855,80 @@ export default function KnowledgeGraph() {
 
       {/* Actions */}
       <div className="actions-bar">
-        <label className="action-btn import-btn">
-          📥 {importing ? '导入中...' : '导入对话'}
-          <input
-            type="file"
-            accept=".json,.jsonl"
-            onChange={handleImport}
-            disabled={importing}
-            hidden
-          />
-        </label>
-        <button
-          className="action-btn extract-btn"
-          onClick={handleExtractBatch}
-          disabled={extracting || !stats?.total_records}
-        >
-          🧪 {extracting ? 'AI 提取中...' : '提取 10 条'}
-        </button>
-        <button
-          className="action-btn extract-all-btn"
-          onClick={handleExtractAll}
-          disabled={extracting || !stats?.total_records}
-        >
-          ⚡ {extracting ? '处理中...' : '提取全部'}
-        </button>
+        {/* Import Section */}
+        <div className="action-group">
+          <label className="action-btn import-btn">
+            📥 {importing ? '导入中...' : '导入对话'}
+            <input
+              type="file"
+              accept=".json,.jsonl"
+              onChange={handleImport}
+              disabled={importing}
+              hidden
+            />
+          </label>
+        </div>
+
+        {/* Extract Section */}
+        <div className="action-group extract-group">
+          <div className="extract-controls">
+            <select
+              className="extract-select"
+              value={extractLimit}
+              onChange={e => setExtractLimit(Number(e.target.value))}
+              disabled={extracting}
+            >
+              <option value={5}>5 条</option>
+              <option value={10}>10 条</option>
+              <option value={20}>20 条</option>
+              <option value={50}>50 条</option>
+              <option value={100}>100 条</option>
+              <option value={0}>全部</option>
+            </select>
+
+            {!extracting ? (
+              <button
+                className="action-btn extract-btn"
+                onClick={handleExtractStart}
+                disabled={!stats?.total_records}
+              >
+                ▶️ 开始提取
+              </button>
+            ) : (
+              <>
+                <button
+                  className="action-btn pause-btn"
+                  onClick={handleExtractPause}
+                >
+                  ⏸️ 暂停
+                </button>
+                <button
+                  className="action-btn stop-btn"
+                  onClick={handleExtractStop}
+                >
+                  ⏹️ 终止
+                </button>
+              </>
+            )}
+          </div>
+
+          {extracting && (
+            <div className="extract-progress">
+              <div className="progress-info">
+                <span>处理中...</span>
+                <span>{extractedCount} / {extractLimit || '全部'}</span>
+              </div>
+              <div className="progress-bar-container">
+                <div
+                  className="progress-bar"
+                  style={{width: `${extractProgress}%`}}
+                ></div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Search */}
         <div className="search-box">
           <input
             type="text"

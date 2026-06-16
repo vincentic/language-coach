@@ -48,10 +48,53 @@
 /* Actions */
 .actions-bar {
   display: flex;
-  align-items: center;
-  gap: 12px;
+  align-items: flex-start;
+  gap: 16px;
   margin-bottom: 16px;
   flex-wrap: wrap;
+}
+.action-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.extract-group {
+  background: rgba(255,255,255,0.03);
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #333;
+}
+.extract-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.extract-select {
+  padding: 10px 12px;
+  border: 1px solid #333;
+  border-radius: 8px;
+  background: #1a1a2e;
+  color: #fff;
+  font-size: 0.9rem;
+  cursor: pointer;
+  outline: none;
+}
+.extract-select:focus {
+  border-color: #7c4dff;
+}
+.extract-select option {
+  background: #1a1a2e;
+  color: #fff;
+}
+.extract-progress {
+  margin-top: 8px;
+}
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: #888;
+  margin-bottom: 4px;
 }
 .action-btn {
   padding: 10px 20px;
@@ -72,12 +115,17 @@
   color: #fff;
 }
 .extract-btn:hover { background: #651fff; }
-.extract-all-btn {
-  background: #ff6d00;
+.pause-btn {
+  background: #ffa726;
   color: #fff;
 }
-.extract-all-btn:hover { background: #e65100; }
-.extract-btn:disabled, .extract-all-btn:disabled, .import-btn:disabled {
+.pause-btn:hover { background: #f57c00; }
+.stop-btn {
+  background: #ef5350;
+  color: #fff;
+}
+.stop-btn:hover { background: #c62828; }
+.extract-btn:disabled, .import-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
