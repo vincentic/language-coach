@@ -67,10 +67,14 @@ export default function Report() {
   const [personaStory, setPersonaStory] = useState(null);
   const [generatingStory, setGeneratingStory] = useState(false);
   const [showStory, setShowStory] = useState(false);
-  const [activeSection, setActiveSection] = useState('combined'); // 'combined', 'knowledge', or 'grok'
+  const [activeSection, setActiveSection] = useState('combined'); // 'combined', 'knowledge', 'grok', or 'career'
   const [completeStory, setCompleteStory] = useState(null);
   const [generatingComplete, setGeneratingComplete] = useState(false);
   const [showCompleteStory, setShowCompleteStory] = useState(false);
+  const [careerStories, setCareerStories] = useState(null);
+  const [generatingCareer, setGeneratingCareer] = useState(false);
+  const [showCareerStories, setShowCareerStories] = useState(false);
+  const [selectedPaths, setSelectedPaths] = useState(['technical_expert', 'entrepreneur', 'creative_technologist']);
 
   useEffect(() => {
     loadReport();
@@ -147,6 +151,32 @@ export default function Report() {
     }
   };
 
+  const handleGenerateCareerStories = async () => {
+    setGeneratingCareer(true);
+    try {
+      const queryParams = selectedPaths.map(p => `paths=${p}`).join('&');
+      const response = await fetch(`${API_BASE}/career/stories?${queryParams}`, {
+        method: 'POST'
+      });
+      if (!response.ok) throw new Error('Failed to generate career stories');
+      const data = await response.json();
+      setCareerStories(data);
+      setShowCareerStories(true);
+    } catch (err) {
+      alert('生成职业故事失败: ' + err.message);
+    } finally {
+      setGeneratingCareer(false);
+    }
+  };
+
+  const togglePath = (pathId) => {
+    setSelectedPaths(prev =>
+      prev.includes(pathId)
+        ? prev.filter(p => p !== pathId)
+        : [...prev, pathId]
+    );
+  };
+
   if (loading) {
     return (
       <div className="report-container">
@@ -209,6 +239,12 @@ export default function Report() {
             💬 Grok
           </button>
         )}
+        <button
+          className={`report-tab ${activeSection === 'career' ? 'active' : ''}`}
+          onClick={() => setActiveSection('career')}
+        >
+          🎯 职业建议
+        </button>
       </div>
 
       {/* Complete Story Button */}
@@ -496,6 +532,111 @@ export default function Report() {
               </div>
             </div>
           </div>
+        </>
+      )}
+
+      {/* Career Suggestions Section */}
+      {activeSection === 'career' && (
+        <>
+          {/* Career Path Selection */}
+          <div className="report-section">
+            <h4>🎯 选择职业方向</h4>
+            <p className="section-desc">选择你感兴趣的职业方向，AI 将为你生成专属的职业人生故事</p>
+            <div className="career-paths-grid">
+              {[
+                { id: 'technical_expert', name: '技术专家之路', icon: '🔧', desc: '深耕技术，成为领域内的权威专家' },
+                { id: 'entrepreneur', name: '创业者之路', icon: '🚀', desc: '创立自己的公司，实现商业价值' },
+                { id: 'creative_technologist', name: '创意技术人之路', icon: '🎨', desc: '结合技术与创意，打造独特的作品' },
+                { id: 'educator', name: '教育者之路', icon: '📚', desc: '分享知识，培养下一代' },
+                { id: 'researcher', name: '研究者之路', icon: '🔬', desc: '探索未知，推动知识边界' },
+                { id: 'polyglot_professional', name: '多语言专业人士之路', icon: '🌍', desc: '利用多语言能力，在国际化领域发展' },
+              ].map(path => (
+                <div
+                  key={path.id}
+                  className={`career-path-card ${selectedPaths.includes(path.id) ? 'selected' : ''}`}
+                  onClick={() => togglePath(path.id)}
+                >
+                  <span className="career-path-icon">{path.icon}</span>
+                  <span className="career-path-name">{path.name}</span>
+                  <span className="career-path-desc">{path.desc}</span>
+                  {selectedPaths.includes(path.id) && <span className="career-path-check">✓</span>}
+                </div>
+              ))}
+            </div>
+            <button
+              className="action-btn career-btn"
+              onClick={handleGenerateCareerStories}
+              disabled={generatingCareer || selectedPaths.length === 0}
+            >
+              {generatingCareer ? '✨ AI 正在规划人生...' : `✨ 生成 ${selectedPaths.length} 条职业人生故事`}
+            </button>
+          </div>
+
+          {/* Career Stories Display */}
+          {showCareerStories && careerStories && (
+            <div className="career-stories-container">
+              {/* User Context */}
+              {careerStories.user_context && (
+                <div className="report-section">
+                  <h4>📊 你的背景分析</h4>
+                  <div className="stats-grid">
+                    <div className="stat-card">
+                      <span className="stat-value">{careerStories.user_context.total_records}</span>
+                      <span className="stat-label">总记录数</span>
+                    </div>
+                    <div className="stat-card">
+                      <span className="stat-value">{careerStories.user_context.top_keywords?.length || 0}</span>
+                      <span className="stat-label">关键词</span>
+                    </div>
+                    <div className="stat-card">
+                      <span className="stat-value">{careerStories.user_context.top_topics?.length || 0}</span>
+                      <span className="stat-label">关注话题</span>
+                    </div>
+                  </div>
+                  <div className="keywords-section">
+                    <h5>你的核心关键词</h5>
+                    <div className="keywords-cloud">
+                      {careerStories.user_context.top_keywords?.slice(0, 10).map((kw, i) => (
+                        <span key={i} className="keyword-tag">{kw}</span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Career Stories */}
+              {careerStories.stories?.map((story, index) => (
+                <div key={story.path_id} className="report-section career-story-section">
+                  <div className="career-story-header">
+                    <h4>{story.icon} {story.path_name}</h4>
+                    <div className="career-match-score">
+                      <span className="match-label">匹配度</span>
+                      <div className="match-bar">
+                        <div className="match-fill" style={{width: `${story.match_score}%`}}></div>
+                      </div>
+                      <span className="match-value">{story.match_score}%</span>
+                    </div>
+                  </div>
+                  <p className="career-story-desc">{story.description}</p>
+                  <div className="career-story-content">
+                    {story.story.split('\n').map((line, i) => {
+                      if (line.startsWith('# ')) {
+                        return <h2 key={i}>{line.slice(2)}</h2>;
+                      } else if (line.startsWith('## ')) {
+                        return <h3 key={i}>{line.slice(3)}</h3>;
+                      } else if (line.startsWith('### ')) {
+                        return <h4 key={i}>{line.slice(4)}</h4>;
+                      } else if (line.trim() === '') {
+                        return <br key={i} />;
+                      } else {
+                        return <p key={i}>{line}</p>;
+                      }
+                    })}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </>
       )}
 
