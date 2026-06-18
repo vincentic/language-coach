@@ -1,0 +1,20 @@
+# macOS
+.DS_Store
+
+# Dependencies
+node_modules/
+
+# Build output
+frontend/dist/
+
+# Export data
+export_data_grok/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Logs
+*.log
