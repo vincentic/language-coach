@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import './App.css'
 
-import PracticeMode from './pages/PracticeMode'
+import PracticeMode from './speaking/pages/PracticeMode'
 import KnowledgeGraph from './components/knowledge/KnowledgeGraph'
 import NetworkArchitecture from './components/knowledge/NetworkArchitecture'
 import Report from './components/knowledge/Report'

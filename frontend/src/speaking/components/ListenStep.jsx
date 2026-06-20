@@ -85,14 +85,14 @@ export function ListenStep({ sessionId, sentence, translation, description, word
       </div>
 
       <div className="audio-controls">
-        <button 
+        <button
           onClick={playAudio}
           disabled={isPlaying}
           className="play-button"
         >
           {isPlaying ? '🔊 Playing...' : '▶️ Play Audio'}
         </button>
-        <button 
+        <button
           onClick={handleListenComplete}
           className="listen-confirm-button"
         >

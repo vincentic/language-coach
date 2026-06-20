@@ -108,7 +108,7 @@ export function RepeatStep({ sessionId, sentence, previousFeedback, onComplete, 
       {feedback && showExercise && (
         <div className="exercise-section">
           <h3>📚 Targeted Exercise</h3>
-          
+
           <div className="tips-box focused">
             <h4>Key Focus Points:</h4>
             <ul>
@@ -144,8 +144,8 @@ export function RepeatStep({ sessionId, sentence, previousFeedback, onComplete, 
         </div>
       )}
 
-      <button 
-        onClick={() => onComplete({ step: 'apply' })} 
+      <button
+        onClick={() => onComplete({ step: 'apply' })}
         className="next-step-button"
         disabled={!showExercise}
       >
