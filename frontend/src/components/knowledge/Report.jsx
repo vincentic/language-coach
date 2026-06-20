@@ -71,10 +71,10 @@ export default function Report() {
   const [completeStory, setCompleteStory] = useState(null);
   const [generatingComplete, setGeneratingComplete] = useState(false);
   const [showCompleteStory, setShowCompleteStory] = useState(false);
-  const [careerStories, setCareerStories] = useState(null);
-  const [generatingCareer, setGeneratingCareer] = useState(false);
-  const [showCareerStories, setShowCareerStories] = useState(false);
-  const [selectedPaths, setSelectedPaths] = useState(['technical_expert', 'entrepreneur', 'creative_technologist']);
+  const [valueStories, setValueStories] = useState(null);
+  const [generatingValue, setGeneratingValue] = useState(false);
+  const [showValueStories, setShowValueStories] = useState(false);
+  const [selectedPaths, setSelectedPaths] = useState(['content_creation', 'digital_software', 'handmade_invention', 'companionship_growth']);
   const [practiceData, setPracticeData] = useState(null);
   const [loadingPractice, setLoadingPractice] = useState(false);
 
@@ -171,21 +171,21 @@ export default function Report() {
     }
   };
 
-  const handleGenerateCareerStories = async () => {
-    setGeneratingCareer(true);
+  const handleGenerateValueStories = async () => {
+    setGeneratingValue(true);
     try {
       const queryParams = selectedPaths.map(p => `paths=${p}`).join('&');
-      const response = await fetch(`${API_BASE}/career/stories?${queryParams}`, {
+      const response = await fetch(`${API_BASE}/value/stories?${queryParams}`, {
         method: 'POST'
       });
-      if (!response.ok) throw new Error('Failed to generate career stories');
+      if (!response.ok) throw new Error('Failed to generate value stories');
       const data = await response.json();
-      setCareerStories(data);
-      setShowCareerStories(true);
+      setValueStories(data);
+      setShowValueStories(true);
     } catch (err) {
-      alert('生成职业故事失败: ' + err.message);
+      alert('生成创造价值故事失败: ' + err.message);
     } finally {
-      setGeneratingCareer(false);
+      setGeneratingValue(false);
     }
   };
 
@@ -260,10 +260,10 @@ export default function Report() {
           </button>
         )}
         <button
-          className={`report-tab ${activeSection === 'career' ? 'active' : ''}`}
-          onClick={() => setActiveSection('career')}
+          className={`report-tab ${activeSection === 'value' ? 'active' : ''}`}
+          onClick={() => setActiveSection('value')}
         >
-          🎯 职业建议
+          💡 创造价值
         </button>
         <button
           className={`report-tab ${activeSection === 'practice' ? 'active' : ''}`}
@@ -561,21 +561,19 @@ export default function Report() {
         </>
       )}
 
-      {/* Career Suggestions Section */}
-      {activeSection === 'career' && (
+      {/* Value Creation Section */}
+      {activeSection === 'value' && (
         <>
-          {/* Career Path Selection */}
+          {/* Value Path Selection */}
           <div className="report-section">
-            <h4>🎯 选择职业方向</h4>
-            <p className="section-desc">选择你感兴趣的职业方向，AI 将为你生成专属的职业人生故事</p>
+            <h4>💡 选择创造价值方向</h4>
+            <p className="section-desc">选择你感兴趣的创造价值方向，AI 将为你生成专属的人生故事</p>
             <div className="career-paths-grid">
               {[
-                { id: 'technical_expert', name: '技术专家之路', icon: '🔧', desc: '深耕技术，成为领域内的权威专家' },
-                { id: 'entrepreneur', name: '创业者之路', icon: '🚀', desc: '创立自己的公司，实现商业价值' },
-                { id: 'creative_technologist', name: '创意技术人之路', icon: '🎨', desc: '结合技术与创意，打造独特的作品' },
-                { id: 'educator', name: '教育者之路', icon: '📚', desc: '分享知识，培养下一代' },
-                { id: 'researcher', name: '研究者之路', icon: '🔬', desc: '探索未知，推动知识边界' },
-                { id: 'polyglot_professional', name: '多语言专业人士之路', icon: '🌍', desc: '利用多语言能力，在国际化领域发展' },
+                { id: 'content_creation', name: '内容创作之路', icon: '✍️', desc: '通过文字、视频、音乐等内容形式创造价值' },
+                { id: 'digital_software', name: '数字软件之路', icon: '💻', desc: '用代码和数字工具解决实际问题' },
+                { id: 'handmade_invention', name: '手工发明之路', icon: '🔧', desc: '用双手创造实体物品，将想法变为现实' },
+                { id: 'companionship_growth', name: '陪伴成长之路', icon: '🌱', desc: '陪伴他人成长，在教育和指导中创造价值' },
               ].map(path => (
                 <div
                   key={path.id}
@@ -591,38 +589,38 @@ export default function Report() {
             </div>
             <button
               className="action-btn career-btn"
-              onClick={handleGenerateCareerStories}
-              disabled={generatingCareer || selectedPaths.length === 0}
+              onClick={handleGenerateValueStories}
+              disabled={generatingValue || selectedPaths.length === 0}
             >
-              {generatingCareer ? '✨ AI 正在规划人生...' : `✨ 生成 ${selectedPaths.length} 条职业人生故事`}
+              {generatingValue ? '✨ AI 正在创作中...' : `✨ 生成 ${selectedPaths.length} 条创造价值故事`}
             </button>
           </div>
 
-          {/* Career Stories Display */}
-          {showCareerStories && careerStories && (
+          {/* Value Stories Display */}
+          {showValueStories && valueStories && (
             <div className="career-stories-container">
               {/* User Context */}
-              {careerStories.user_context && (
+              {valueStories.user_context && (
                 <div className="report-section">
                   <h4>📊 你的背景分析</h4>
                   <div className="stats-grid">
                     <div className="stat-card">
-                      <span className="stat-value">{careerStories.user_context.total_records}</span>
+                      <span className="stat-value">{valueStories.user_context.total_records}</span>
                       <span className="stat-label">总记录数</span>
                     </div>
                     <div className="stat-card">
-                      <span className="stat-value">{careerStories.user_context.top_keywords?.length || 0}</span>
+                      <span className="stat-value">{valueStories.user_context.top_keywords?.length || 0}</span>
                       <span className="stat-label">关键词</span>
                     </div>
                     <div className="stat-card">
-                      <span className="stat-value">{careerStories.user_context.top_topics?.length || 0}</span>
+                      <span className="stat-value">{valueStories.user_context.top_topics?.length || 0}</span>
                       <span className="stat-label">关注话题</span>
                     </div>
                   </div>
                   <div className="keywords-section">
                     <h5>你的核心关键词</h5>
                     <div className="keywords-cloud">
-                      {careerStories.user_context.top_keywords?.slice(0, 10).map((kw, i) => (
+                      {valueStories.user_context.top_keywords?.slice(0, 10).map((kw, i) => (
                         <span key={i} className="keyword-tag">{kw}</span>
                       ))}
                     </div>
@@ -630,8 +628,8 @@ export default function Report() {
                 </div>
               )}
 
-              {/* Career Stories */}
-              {careerStories.stories?.map((story, index) => (
+              {/* Value Stories */}
+              {valueStories.stories?.map((story, index) => (
                 <div key={story.path_id} className="report-section career-story-section">
                   <div className="career-story-header">
                     <h4>{story.icon} {story.path_name}</h4>
