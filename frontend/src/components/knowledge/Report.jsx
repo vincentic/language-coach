@@ -67,7 +67,7 @@ export default function Report() {
   const [personaStory, setPersonaStory] = useState(null);
   const [generatingStory, setGeneratingStory] = useState(false);
   const [showStory, setShowStory] = useState(false);
-  const [activeSection, setActiveSection] = useState('combined'); // 'combined', 'knowledge', 'grok', or 'career'
+  const [activeSection, setActiveSection] = useState('combined'); // 'combined', 'knowledge', 'grok', 'career', or 'practice'
   const [completeStory, setCompleteStory] = useState(null);
   const [generatingComplete, setGeneratingComplete] = useState(false);
   const [showCompleteStory, setShowCompleteStory] = useState(false);
@@ -75,10 +75,27 @@ export default function Report() {
   const [generatingCareer, setGeneratingCareer] = useState(false);
   const [showCareerStories, setShowCareerStories] = useState(false);
   const [selectedPaths, setSelectedPaths] = useState(['technical_expert', 'entrepreneur', 'creative_technologist']);
+  const [practiceData, setPracticeData] = useState(null);
+  const [loadingPractice, setLoadingPractice] = useState(false);
 
   useEffect(() => {
     loadReport();
   }, []);
+
+  const loadPracticeData = async () => {
+    setLoadingPractice(true);
+    try {
+      const response = await fetch(`${API_BASE}/learning-practice-analysis`);
+      if (response.ok) {
+        const data = await response.json();
+        setPracticeData(data);
+      }
+    } catch (err) {
+      console.error('Failed to load practice data:', err);
+    } finally {
+      setLoadingPractice(false);
+    }
+  };
 
   const loadReport = async () => {
     setLoading(true);
@@ -109,6 +126,9 @@ export default function Report() {
           setCombinedData(combinedData);
         }
       }
+
+      // Load practice data
+      await loadPracticeData();
     } catch (err) {
       setError(err.message);
       console.error('Failed to load reports:', err);
@@ -244,6 +264,12 @@ export default function Report() {
           onClick={() => setActiveSection('career')}
         >
           🎯 职业建议
+        </button>
+        <button
+          className={`report-tab ${activeSection === 'practice' ? 'active' : ''}`}
+          onClick={() => setActiveSection('practice')}
+        >
+          📚 学习方法
         </button>
       </div>
 
@@ -1168,6 +1194,246 @@ export default function Report() {
               <p>📚 <strong>高效学习者</strong> - 平均每对话 {grokData.overview.avg_conversation_depth} 轮深度交流</p>
             </div>
           </div>
+        </>
+      )}
+
+      {/* Learning Practice Methods Section */}
+      {activeSection === 'practice' && (
+        <>
+          {loadingPractice ? (
+            <div className="report-section">
+              <div className="loading-state">
+                <div className="loading-spinner"></div>
+                <p>加载学习数据中...</p>
+              </div>
+            </div>
+          ) : practiceData ? (
+            <>
+              {/* Practice Overview Stats */}
+              <div className="report-section">
+                <h4>📊 练习概览</h4>
+                <div className="stats-grid">
+                  <div className="stat-card">
+                    <span className="stat-value">{practiceData.practice_overview.total_sessions}</span>
+                    <span className="stat-label">总会话数</span>
+                  </div>
+                  <div className="stat-card">
+                    <span className="stat-value">{practiceData.practice_overview.total_practice_time}</span>
+                    <span className="stat-label">练习时长(分钟)</span>
+                  </div>
+                  <div className="stat-card">
+                    <span className="stat-value">{practiceData.practice_overview.average_score}</span>
+                    <span className="stat-label">平均分数</span>
+                  </div>
+                  <div className="stat-card">
+                    <span className="stat-value">{practiceData.practice_overview.current_streak}</span>
+                    <span className="stat-label">连续天数</span>
+                  </div>
+                </div>
+                <div className="stats-grid" style={{marginTop: '10px'}}>
+                  <div className="stat-card">
+                    <span className="stat-value">{practiceData.practice_overview.words_learned}</span>
+                    <span className="stat-label">已学单词</span>
+                  </div>
+                  <div className="stat-card">
+                    <span className="stat-value">{practiceData.practice_overview.longest_streak}</span>
+                    <span className="stat-label">最长连续</span>
+                  </div>
+                  <div className="stat-card">
+                    <span className="stat-value">{practiceData.practice_overview.total_conversations}</span>
+                    <span className="stat-label">对话次数</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Skill Breakdown */}
+              <div className="report-section">
+                <h4>🎯 技能分解</h4>
+                <div className="interest-bars">
+                  {Object.entries(practiceData.skill_breakdown).map(([skill, info]) => (
+                    <div key={skill} className="interest-bar-item">
+                      <span className="interest-label">{info.name || skill}</span>
+                      <div className="interest-bar-bg">
+                        <div className="interest-bar-fill" style={{
+                          width: `${info.score}%`,
+                          background: info.score >= 75 ? '#82E0AA' : info.score >= 60 ? '#F8C471' : '#F1948A'
+                        }}></div>
+                      </div>
+                      <span className="interest-count">{info.score}%</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="skill-suggestions">
+                  {Object.entries(practiceData.skill_breakdown).map(([skill, info]) => (
+                    info.score < 60 && (
+                      <div key={skill} className="suggestion-item">
+                        <span className="suggestion-icon">💡</span>
+                        <span className="suggestion-text"><strong>{info.name || skill}:</strong> {info.suggestion}</span>
+                      </div>
+                    )
+                  ))}
+                </div>
+              </div>
+
+              {/* Proficiency Levels */}
+              <div className="report-section">
+                <h4>📈 熟练度等级</h4>
+                <div className="stats-grid">
+                  <div className="stat-card">
+                    <span className="stat-value">{practiceData.proficiency_levels.i_label}</span>
+                    <span className="stat-label">当前等级</span>
+                  </div>
+                  <div className="stat-card">
+                    <span className="stat-value">{practiceData.proficiency_levels.overall_level}</span>
+                    <span className="stat-label">整体水平</span>
+                  </div>
+                </div>
+                <div className="category-grid" style={{marginTop: '15px'}}>
+                  <div className="category-item">
+                    <span className="category-dot" style={{background: '#4ECDC4'}}></span>
+                    <span className="category-name">词汇复杂度</span>
+                    <span className="category-count">Lv.{practiceData.proficiency_levels.lexical.level} {practiceData.proficiency_levels.lexical.label}</span>
+                  </div>
+                  <div className="category-item">
+                    <span className="category-dot" style={{background: '#45B7D1'}}></span>
+                    <span className="category-name">语法复杂度</span>
+                    <span className="category-count">Lv.{practiceData.proficiency_levels.grammatical.level} {practiceData.proficiency_levels.grammatical.label}</span>
+                  </div>
+                  <div className="category-item">
+                    <span className="category-dot" style={{background: '#96CEB4'}}></span>
+                    <span className="category-name">语音复杂度</span>
+                    <span className="category-count">Lv.{practiceData.proficiency_levels.phonological.level} {practiceData.proficiency_levels.phonological.label}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Spaced Repetition Status */}
+              <div className="report-section">
+                <h4>🔄 间隔重复状态</h4>
+                <div className="stats-grid">
+                  <div className="stat-card">
+                    <span className="stat-value">{practiceData.spaced_repetition.total_items}</span>
+                    <span className="stat-label">总复习项</span>
+                  </div>
+                  <div className="stat-card">
+                    <span className="stat-value">{practiceData.spaced_repetition.due_today}</span>
+                    <span className="stat-label">今日待复习</span>
+                  </div>
+                  <div className="stat-card">
+                    <span className="stat-value">{practiceData.spaced_repetition.mastery_rate}%</span>
+                    <span className="stat-label">掌握率</span>
+                  </div>
+                </div>
+                <div className="category-grid" style={{marginTop: '15px'}}>
+                  {Object.entries(practiceData.spaced_repetition.box_distribution).map(([box, count]) => (
+                    <div key={box} className="category-item">
+                      <span className="category-dot" style={{
+                        background: box === '1' ? '#F1948A' : box === '2' ? '#F8C471' : box === '3' ? '#82E0AA' : box === '4' ? '#4ECDC4' : '#45B7D1'
+                      }}></span>
+                      <span className="category-name">盒子 {box}</span>
+                      <span className="category-count">{count} 项</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="review-recommendation">
+                  <p>💡 <strong>建议:</strong> {practiceData.spaced_repetition.recommendation}</p>
+                </div>
+              </div>
+
+              {/* Practice Patterns */}
+              <div className="report-section">
+                <h4>📊 练习模式</h4>
+                <div className="stats-grid">
+                  <div className="stat-card">
+                    <span className="stat-value">{practiceData.practice_patterns.session_frequency}</span>
+                    <span className="stat-label">练习频率</span>
+                  </div>
+                  <div className="stat-card">
+                    <span className="stat-value">{practiceData.practice_patterns.preferred_difficulty}</span>
+                    <span className="stat-label">偏好难度</span>
+                  </div>
+                </div>
+                {practiceData.practice_patterns.preferred_scenarios.length > 0 && (
+                  <div className="category-grid" style={{marginTop: '15px'}}>
+                    <h5>偏好场景</h5>
+                    {practiceData.practice_patterns.preferred_scenarios.map((item, i) => (
+                      <div key={i} className="category-item">
+                        <span className="category-dot" style={{background: getColor(item.scenario)}}></span>
+                        <span className="category-name">{item.scenario}</span>
+                        <span className="category-count">{item.count} 次</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                {practiceData.practice_patterns.peak_practice_times.length > 0 && (
+                  <div className="category-grid" style={{marginTop: '15px'}}>
+                    <h5>高峰练习时间</h5>
+                    {practiceData.practice_patterns.peak_practice_times.map((item, i) => (
+                      <div key={i} className="category-item">
+                        <span className="category-dot" style={{background: '#4ECDC4'}}></span>
+                        <span className="category-name">{item.time}</span>
+                        <span className="category-count">{item.count} 次</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Learning Recommendations */}
+              <div className="report-section">
+                <h4>💡 个性化学习建议</h4>
+                <div className="top-nodes-list">
+                  {practiceData.learning_recommendations.map((rec, i) => (
+                    <div key={i} className="top-node-item" style={{
+                      borderLeft: rec.priority === 'high' ? '4px solid #F1948A' :
+                                   rec.priority === 'medium' ? '4px solid #F8C471' : '4px solid #82E0AA'
+                    }}>
+                      <span className="rank" style={{
+                        background: rec.priority === 'high' ? '#F1948A' :
+                                    rec.priority === 'medium' ? '#F8C471' : '#82E0AA',
+                        color: 'white',
+                        padding: '2px 8px',
+                        borderRadius: '4px',
+                        fontSize: '0.8rem'
+                      }}>
+                        {rec.priority === 'high' ? '高' : rec.priority === 'medium' ? '中' : '低'}
+                      </span>
+                      <div className="node-title" style={{flex: 1}}>
+                        <strong>{rec.title}</strong>
+                        <p style={{margin: '5px 0 0 0', fontSize: '0.9rem', color: '#666'}}>{rec.description}</p>
+                        <p style={{margin: '5px 0 0 0', fontSize: '0.85rem', color: '#4ECDC4'}}>🎯 {rec.action}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Methodology Tips */}
+              <div className="report-section">
+                <h4>📖 学习方法论</h4>
+                <div className="methodology-tips">
+                  {practiceData.methodology_tips.map((tip, i) => (
+                    <div key={i} className="component-item">
+                      <div className="component-header">
+                        <span className="component-id">{tip.theory}</span>
+                      </div>
+                      <div className="component-nodes">
+                        <p style={{margin: '0 0 8px 0', fontWeight: 'bold'}}>{tip.tip}</p>
+                        <p style={{margin: 0, fontSize: '0.9rem', color: '#666'}}>应用场景: {tip.applicable_scenario}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </>
+          ) : (
+            <div className="report-section">
+              <div className="empty-state">
+                <p>📚 暂无学习数据</p>
+                <p className="hint">开始练习后，这里将显示你的学习分析</p>
+              </div>
+            </div>
+          )}
         </>
       )}
     </div>

@@ -16,5 +16,8 @@ export_data_grok/
 *.swp
 *.swo
 
+# Data
+data/
+
 # Logs
 *.log

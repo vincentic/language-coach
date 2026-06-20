@@ -1155,3 +1155,101 @@
     gap: 12px;
   }
 }
+
+/* Learning Practice Methods Section */
+.skill-suggestions {
+  margin-top: 16px;
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 10px;
+}
+
+.suggestion-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.suggestion-item:last-child {
+  border-bottom: none;
+}
+
+.suggestion-icon {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.suggestion-text {
+  font-size: 0.85rem;
+  color: #aaa;
+  line-height: 1.5;
+}
+
+.suggestion-text strong {
+  color: #4fc3f7;
+}
+
+.review-recommendation {
+  margin-top: 16px;
+  padding: 14px;
+  background: rgba(79, 195, 247, 0.1);
+  border-radius: 10px;
+  border: 1px solid rgba(79, 195, 247, 0.2);
+}
+
+.review-recommendation p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #aaa;
+}
+
+.review-recommendation strong {
+  color: #4fc3f7;
+}
+
+.methodology-tips {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.methodology-tips .component-item {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid #333;
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.methodology-tips .component-header {
+  margin-bottom: 10px;
+}
+
+.methodology-tips .component-id {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #7c4dff;
+  padding: 4px 10px;
+  background: rgba(124, 77, 255, 0.15);
+  border-radius: 6px;
+}
+
+.methodology-tips .component-nodes p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #aaa;
+  line-height: 1.6;
+}
+
+/* Responsive for Practice */
+@media (max-width: 768px) {
+  .skill-suggestions {
+    padding: 10px;
+  }
+
+  .suggestion-item {
+    flex-direction: column;
+    gap: 4px;
+  }
+}
