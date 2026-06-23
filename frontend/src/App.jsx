@@ -5,6 +5,7 @@ import PracticeMode from './speaking/pages/PracticeMode'
 import KnowledgeGraph from './components/knowledge/KnowledgeGraph'
 import NetworkArchitecture from './components/knowledge/NetworkArchitecture'
 import Report from './components/knowledge/Report'
+import LearningDashboard from './components/knowledge/LearningDashboard'
 
 function App() {
   const [activeTab, setActiveTab] = useState('practice')
@@ -44,6 +45,12 @@ function App() {
         >
           📊 分析报告
         </button>
+        <button
+          className={`tab-btn ${activeTab === 'learning' ? 'active' : ''}`}
+          onClick={() => setActiveTab('learning')}
+        >
+          📚 学习
+        </button>
       </nav>
 
       {/* Main Content Area */}
@@ -59,6 +66,9 @@ function App() {
         )}
         {activeTab === 'report' && (
           <Report />
+        )}
+        {activeTab === 'learning' && (
+          <LearningDashboard />
         )}
       </main>
     </div>
