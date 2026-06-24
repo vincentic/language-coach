@@ -5,11 +5,11 @@ import { usePathname } from 'next/navigation'
 import './Sidebar.css'
 
 const NAV_ITEMS = [
-  { href: '/', label: '🎯 练习', icon: '🎯', description: 'Shadow Reading' },
+  { href: '/', label: '📚 学习计划', icon: '📚', description: 'Learning Plan' },
+  { href: '/practice', label: '🎯 语言练习', icon: '🎯', description: 'Shadow Reading' },
   { href: '/knowledge', label: '🧠 知识网络', icon: '🧠', description: 'Knowledge Graph' },
   { href: '/network', label: '🕸️ 网络架构', icon: '🕸️', description: 'Network View' },
   { href: '/report', label: '📊 分析报告', icon: '📊', description: 'Analytics' },
-  { href: '/learning', label: '📚 学习计划', icon: '📚', description: 'Learning Plan' },
 ]
 
 export default function Sidebar() {
