@@ -21,3 +21,6 @@ data/
 
 # Logs
 *.log
+frontend-vite-backup/
+frontend/node_modules/
+frontend/.next/

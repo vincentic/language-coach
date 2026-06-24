@@ -1,0 +1,53 @@
+'use client'
+
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import './Sidebar.css'
+
+const NAV_ITEMS = [
+  { href: '/', label: '🎯 练习', icon: '🎯', description: 'Shadow Reading' },
+  { href: '/knowledge', label: '🧠 知识网络', icon: '🧠', description: 'Knowledge Graph' },
+  { href: '/network', label: '🕸️ 网络架构', icon: '🕸️', description: 'Network View' },
+  { href: '/report', label: '📊 分析报告', icon: '📊', description: 'Analytics' },
+  { href: '/learning', label: '📚 学习计划', icon: '📚', description: 'Learning Plan' },
+]
+
+export default function Sidebar() {
+  const pathname = usePathname()
+
+  return (
+    <nav className="sidebar">
+      <div className="sidebar-header">
+        <h1 className="sidebar-logo">
+          <span className="logo-icon">🎓</span>
+          <span className="logo-text">AI Coach</span>
+        </h1>
+      </div>
+
+      <div className="nav-items">
+        {NAV_ITEMS.map((item) => {
+          const isActive = pathname === item.href ||
+            (item.href !== '/' && pathname.startsWith(item.href))
+
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={`nav-item ${isActive ? 'active' : ''}`}
+            >
+              <span className="nav-icon">{item.icon}</span>
+              <div className="nav-text">
+                <span className="nav-label">{item.label.split(' ').slice(1).join(' ')}</span>
+                <span className="nav-desc">{item.description}</span>
+              </div>
+            </Link>
+          )
+        })}
+      </div>
+
+      <div className="sidebar-footer">
+        <div className="version-info">v1.0.0</div>
+      </div>
+    </nav>
+  )
+}
