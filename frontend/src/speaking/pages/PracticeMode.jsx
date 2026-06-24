@@ -6,11 +6,32 @@ import { ApplyStep } from '../components/ApplyStep';
 import { DifficultyBadge } from '../components/DifficultyBadge';
 import '../styles/ShadowReadingSteps.css';
 
+const LANGUAGES = [
+  { code: 'en', name: 'English', flag: '🇬🇧' },
+  { code: 'es', name: 'Español', flag: '🇪🇸' },
+  { code: 'fr', name: 'Français', flag: '🇫🇷' },
+  { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
+  { code: 'ja', name: '日本語', flag: '🇯🇵' },
+  { code: 'ko', name: '한국어', flag: '🇰🇷' },
+  { code: 'ru', name: 'Русский', flag: '🇷🇺' },
+];
+
+const SCENARIOS = [
+  { key: 'greetings', label: '👋 Greetings', icon: '👋' },
+  { key: 'restaurant', label: '🍽️ Restaurant', icon: '🍽️' },
+  { key: 'shopping', label: '🛒 Shopping', icon: '🛒' },
+  { key: 'directions', label: '🗺️ Directions', icon: '🗺️' },
+  { key: 'travel', label: '✈️ Travel', icon: '✈️' },
+  { key: 'daily', label: '☀️ Daily Life', icon: '☀️' },
+];
+
 /**
  * PracticeMode - 4-step Shadow Reading with i+1 Adaptive Learning
  * All 4 steps visible on one page in a grid layout
  */
-export default function PracticeMode({ userId, language = 'en', scenario = 'greetings' }) {
+export default function PracticeMode({ userId, language: initialLang = 'en', scenario: initialScenario = 'greetings' }) {
+  const [language, setLanguage] = useState(initialLang);
+  const [scenario, setScenario] = useState(initialScenario);
   const [sessionId, setSessionId] = useState(null);
   const [sessionData, setSessionData] = useState(null);
   const [shadowFeedback, setShadowFeedback] = useState(null);
@@ -110,6 +131,33 @@ export default function PracticeMode({ userId, language = 'en', scenario = 'gree
 
   return (
     <div className="practice-mode-container">
+      {/* Language & Scenario Selector */}
+      <div className="lang-scenario-selector">
+        <div className="lang-selector">
+          {LANGUAGES.map(l => (
+            <button
+              key={l.code}
+              className={`lang-btn ${language === l.code ? 'active' : ''}`}
+              onClick={() => setLanguage(l.code)}
+              title={l.name}
+            >
+              {l.flag}
+            </button>
+          ))}
+        </div>
+        <div className="scenario-selector">
+          {SCENARIOS.map(s => (
+            <button
+              key={s.key}
+              className={`scenario-btn ${scenario === s.key ? 'active' : ''}`}
+              onClick={() => setScenario(s.key)}
+            >
+              {s.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
       <div className="all-steps-header">
         <h2>🗣️ Shadow Reading Practice</h2>
         <p className="sentence-preview">"{sessionData?.sentence}"</p>
@@ -138,6 +186,7 @@ export default function PracticeMode({ userId, language = 'en', scenario = 'gree
                 wordTips={sessionData.word_tips}
                 onComplete={handleListenComplete}
                 embedded={true}
+                language={language}
               />
             )}
           </div>
@@ -158,6 +207,7 @@ export default function PracticeMode({ userId, language = 'en', scenario = 'gree
                 i1Context={i1Context}
                 onComplete={handleShadowComplete}
                 embedded={true}
+                language={language}
               />
             )}
           </div>

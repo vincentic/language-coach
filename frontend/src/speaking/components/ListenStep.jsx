@@ -6,7 +6,7 @@ import '../styles/ShadowReadingSteps.css';
  * Step 1: LISTEN 👂
  * Focus on comprehending and listening to native pronunciation
  */
-export function ListenStep({ sessionId, sentence, translation, description, wordTips, onComplete, embedded = false }) {
+export function ListenStep({ sessionId, sentence, translation, description, wordTips, onComplete, embedded = false, language = 'en' }) {
   const [listened, setListened] = useState(false);
   const [listenCount, setListenCount] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -16,7 +16,7 @@ export function ListenStep({ sessionId, sentence, translation, description, word
       setIsPlaying(true);
       await voiceService.speak(sentence, {
         rate: 0.8, // Natural speaking pace
-        lang: 'en'
+        lang: language
       });
     } catch (err) {
       console.error('Voice playback error:', err);

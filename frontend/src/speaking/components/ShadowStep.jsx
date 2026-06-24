@@ -7,7 +7,7 @@ import '../styles/ShadowReadingSteps.css';
  * Record yourself speaking simultaneously with native audio
  * Uses i+1 context to provide level-appropriate feedback
  */
-export function ShadowStep({ sessionId, sentence, i1Context, onComplete }) {
+export function ShadowStep({ sessionId, sentence, i1Context, onComplete, language = 'en' }) {
   const [isRecording, setIsRecording] = useState(false);
   const [recordedAudio, setRecordedAudio] = useState(null);
   const [recordingTime, setRecordingTime] = useState(0);
@@ -55,7 +55,7 @@ export function ShadowStep({ sessionId, sentence, i1Context, onComplete }) {
 
       // Start native audio playback simultaneously
       setIsPlayingAudio(true);
-      voiceService.speak(sentence, { rate: 0.8, lang: 'en' }).finally(() => {
+      voiceService.speak(sentence, { rate: 0.8, lang: language }).finally(() => {
         setIsPlayingAudio(false);
       });
 
