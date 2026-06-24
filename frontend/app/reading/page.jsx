@@ -1,9 +1,32 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { DB_BOOKS, CURATED_BOOKS } from '@/data/books'
 import './reading.css'
 
-const ALL_BOOKS = Object.entries({
+// 合并数据库书籍 + 推荐书籍
+function mergeBooks() {
+  const merged = {}
+  const allDomains = new Set([...Object.keys(DB_BOOKS), ...Object.keys(CURATED_BOOKS)])
+  for (const domain of allDomains) {
+    const dbBooks = DB_BOOKS[domain] || []
+    const curated = CURATED_BOOKS[domain] || []
+    const seen = new Set()
+    const list = []
+    for (const book of [...dbBooks, ...curated]) {
+      if (!seen.has(book.title)) {
+        seen.add(book.title)
+        list.push(book)
+      }
+    }
+    merged[domain] = list
+  }
+  return merged
+}
+
+const ALL_BOOKS = Object.entries(mergeBooks())
+/*
+const ALL_BOOKS_OLD = Object.entries({
   "健康": [
     { title: "《为什么我们睡觉》", author: "Matthew Walker", topic: "睡眠科学", level: "入门" },
     { title: "《运动改造大脑》", author: "John Ratey", topic: "运动与大脑", level: "入门" },
@@ -131,6 +154,7 @@ const ALL_BOOKS = Object.entries({
     { title: "《少有人走的路》", author: "M. Scott Peck", topic: "心智成熟", level: "经典" },
   ],
 })
+*/
 
 export default function ReadingPage() {
   const [bookStatus, setBookStatus] = useState({})

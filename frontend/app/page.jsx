@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { CURATED_BOOKS, DB_BOOKS } from '@/data/books'
 import './page.css'
 
 const LEVEL_CONFIG = {
@@ -10,93 +11,27 @@ const LEVEL_CONFIG = {
   gap:    { label: '缺', color: '#ef5350', icon: '🔴' }
 }
 
-// 书籍推荐数据
-const BOOK_RECOMMENDATIONS = {
-  "健康": [
-    { title: "《为什么我们睡觉》", author: "Matthew Walker", topic: "睡眠科学", level: "入门" },
-    { title: "《运动改造大脑》", author: "John Ratey", topic: "运动与大脑", level: "入门" },
-    { title: "《中国居民膳食指南》", author: "中国营养学会", topic: "营养学", level: "基础" },
-    { title: "《默克家庭诊疗手册》", author: "Merck", topic: "疾病自诊", level: "工具书" },
-    { title: "《心理学与生活》", author: "Richard Gerrig", topic: "心理学基础", level: "入门" },
-  ],
-  "财务": [
-    { title: "《富爸爸穷爸爸》", author: "Robert Kiyosaki", topic: "财商启蒙", level: "入门" },
-    { title: "《小狗钱钱》", author: "Bodo Schäfer", topic: "理财入门", level: "入门" },
-    { title: "《指数基金投资指南》", author: "银行螺丝钉", topic: "基金投资", level: "实操" },
-    { title: "《财务自由之路》", author: "Bodo Schäfer", topic: "财务规划", level: "进阶" },
-    { title: "《聪明的投资者》", author: "Benjamin Graham", topic: "价值投资", level: "经典" },
-  ],
-  "教育": [
-    { title: "《学习之道》", author: "Barbara Oakley", topic: "学习方法", level: "入门" },
-    { title: "《刻意练习》", author: "Anders Ericsson", topic: "技能习得", level: "进阶" },
-    { title: "《如何阅读一本书》", author: "Mortimer Adler", topic: "阅读方法", level: "经典" },
-    { title: "《认知天性》", author: "Peter Brown", topic: "记忆与学习", level: "入门" },
-    { title: "《费曼学习法》", author: "Richard Feynman", topic: "高效学习", level: "实操" },
-  ],
-  "事业": [
-    { title: "《高效能人士的七个习惯》", author: "Stephen Covey", topic: "个人效能", level: "经典" },
-    { title: "《精益创业》", author: "Eric Ries", topic: "创业方法", level: "进阶" },
-    { title: "《关键对话》", author: "Kerry Patterson", topic: "沟通技巧", level: "实操" },
-    { title: "《深度工作》", author: "Cal Newport", topic: "专注力", level: "进阶" },
-    { title: "《远见》", author: "Brian Fetherstonhaugh", topic: "职业规划", level: "入门" },
-  ],
-  "法律": [
-    { title: "《法律常识全知道》", author: "大众法律", topic: "法律基础", level: "入门" },
-    { title: "《劳动合同法实务》", author: "HR实务", topic: "劳动法", level: "实操" },
-    { title: "《婚姻家庭法》", author: "法学教材", topic: "婚姻法", level: "基础" },
-    { title: "《消费者权益保护法》", author: "法律出版社", topic: "消费维权", level: "工具书" },
-    { title: "《民法典与日常生活》", author: "法律普及", topic: "民法", level: "入门" },
-  ],
-  "时间": [
-    { title: "《Getting Things Done》", author: "David Allen", topic: "GTD系统", level: "经典" },
-    { title: "《番茄工作法图解》", author: "Staffan Nöteberg", topic: "时间管理", level: "入门" },
-    { title: "《精力管理》", author: "Jim Loehr", topic: "能量管理", level: "进阶" },
-    { title: "《原子习惯》", author: "James Clear", topic: "习惯养成", level: "入门" },
-    { title: "《心流》", author: "Mihaly Csikszentmihalyi", topic: "最优体验", level: "经典" },
-  ],
-  "关系沟通": [
-    { title: "《非暴力沟通》", author: "Marshall Rosenberg", topic: "沟通方法", level: "经典" },
-    { title: "《亲密关系》", author: "Rowland Miller", topic: "关系心理学", level: "进阶" },
-    { title: "《影响力》", author: "Robert Cialdini", topic: "说服力", level: "经典" },
-    { title: "《高难度对话》", author: "Douglas Stone", topic: "冲突解决", level: "实操" },
-    { title: "《爱的五种语言》", author: "Gary Chapman", topic: "亲密关系", level: "入门" },
-  ],
-  "知识管理": [
-    { title: "《卡片笔记写作法》", author: "Sönke Ahrens", topic: "Zettelkasten", level: "实操" },
-    { title: "《思考，快与慢》", author: "Daniel Kahneman", topic: "认知偏差", level: "经典" },
-    { title: "《穷查理宝典》", author: "Charlie Munger", topic: "思维模型", level: "经典" },
-    { title: "《学会提问》", author: "Neil Browne", topic: "批判性思维", level: "入门" },
-    { title: "《第二大脑》", author: "Tiago Forte", topic: "个人知识管理", level: "实操" },
-  ],
-  "住房": [
-    { title: "《买房红宝书》", author: "住房实战", topic: "购房指南", level: "实操" },
-    { title: "《租房避坑指南》", author: "法律普及", topic: "租房", level: "入门" },
-    { title: "《装修，做好这些就够了》", author: "装修实务", topic: "装修", level: "实操" },
-    { title: "《小家，越住越大》", author: "逯薇", topic: "家居收纳", level: "入门" },
-    { title: "《这样装修不后悔》", author: "姥姥", topic: "装修避坑", level: "实操" },
-  ],
-  "烹饪": [
-    { title: "《盐，脂，酸，热》", author: "Samin Nosrat", topic: "烹饪原理", level: "入门" },
-    { title: "《食物与厨艺》", author: "Harold McGee", topic: "食物科学", level: "进阶" },
-    { title: "《中国居民膳食指南》", author: "中国营养学会", topic: "营养搭配", level: "基础" },
-    { title: "《贝太厨房》", author: "贝太厨房编辑部", topic: "家常菜谱", level: "入门" },
-    { title: "《下厨房》", author: "下厨房社区", topic: "实用菜谱", level: "入门" },
-  ],
-  "心理情绪": [
-    { title: "《情绪急救》", author: "Guy Winch", topic: "情绪管理", level: "入门" },
-    { title: "《正念的奇迹》", author: "一行禅师", topic: "正念冥想", level: "入门" },
-    { title: "《自卑与超越》", author: "Alfred Adler", topic: "个体心理学", level: "经典" },
-    { title: "《被讨厌的勇气》", author: "岸见一郎", topic: "阿德勒心理学", level: "入门" },
-    { title: "《当下的力量》", author: "Eckhart Tolle", topic: "心灵成长", level: "入门" },
-  ],
-  "人生规划": [
-    { title: "《人生的智慧》", author: "叔本华", topic: "人生哲学", level: "经典" },
-    { title: "《活出生命的意义》", author: "Viktor Frankl", topic: "生命意义", level: "经典" },
-    { title: "《百岁人生》", author: "Lynda Gratton", topic: "长寿时代规划", level: "进阶" },
-    { title: "《Ikigai: 生命的意义》", author: "Héctor García", topic: "日本人生哲学", level: "入门" },
-    { title: "《少有人走的路》", author: "M. Scott Peck", topic: "心智成熟", level: "经典" },
-  ],
+// 合并数据库书籍 + 推荐书籍
+function mergeBooks() {
+  const merged = {}
+  const allDomains = new Set([...Object.keys(DB_BOOKS), ...Object.keys(CURATED_BOOKS)])
+  for (const domain of allDomains) {
+    const dbBooks = DB_BOOKS[domain] || []
+    const curated = CURATED_BOOKS[domain] || []
+    const seen = new Set()
+    const list = []
+    for (const book of [...dbBooks, ...curated]) {
+      if (!seen.has(book.title)) {
+        seen.add(book.title)
+        list.push(book)
+      }
+    }
+    merged[domain] = list
+  }
+  return merged
 }
+
+const BOOK_RECOMMENDATIONS = mergeBooks()
 
 export default function HomePage() {
   const [data, setData] = useState(null)
