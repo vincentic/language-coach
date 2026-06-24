@@ -72,23 +72,29 @@ const BOOK_RECOMMENDATIONS = {
     { title: "《买房红宝书》", author: "住房实战", topic: "购房指南", level: "实操" },
     { title: "《租房避坑指南》", author: "法律普及", topic: "租房", level: "入门" },
     { title: "《装修，做好这些就够了》", author: "装修实务", topic: "装修", level: "实操" },
+    { title: "《小家，越住越大》", author: "逯薇", topic: "家居收纳", level: "入门" },
+    { title: "《这样装修不后悔》", author: "姥姥", topic: "装修避坑", level: "实操" },
   ],
   "烹饪": [
     { title: "《盐，脂，酸，热》", author: "Samin Nosrat", topic: "烹饪原理", level: "入门" },
     { title: "《食物与厨艺》", author: "Harold McGee", topic: "食物科学", level: "进阶" },
     { title: "《中国居民膳食指南》", author: "中国营养学会", topic: "营养搭配", level: "基础" },
+    { title: "《贝太厨房》", author: "贝太厨房编辑部", topic: "家常菜谱", level: "入门" },
+    { title: "《下厨房》", author: "下厨房社区", topic: "实用菜谱", level: "入门" },
   ],
   "心理情绪": [
     { title: "《情绪急救》", author: "Guy Winch", topic: "情绪管理", level: "入门" },
     { title: "《正念的奇迹》", author: "一行禅师", topic: "正念冥想", level: "入门" },
     { title: "《自卑与超越》", author: "Alfred Adler", topic: "个体心理学", level: "经典" },
     { title: "《被讨厌的勇气》", author: "岸见一郎", topic: "阿德勒心理学", level: "入门" },
+    { title: "《当下的力量》", author: "Eckhart Tolle", topic: "心灵成长", level: "入门" },
   ],
   "人生规划": [
     { title: "《人生的智慧》", author: "叔本华", topic: "人生哲学", level: "经典" },
     { title: "《活出生命的意义》", author: "Viktor Frankl", topic: "生命意义", level: "经典" },
     { title: "《百岁人生》", author: "Lynda Gratton", topic: "长寿时代规划", level: "进阶" },
     { title: "《Ikigai: 生命的意义》", author: "Héctor García", topic: "日本人生哲学", level: "入门" },
+    { title: "《少有人走的路》", author: "M. Scott Peck", topic: "心智成熟", level: "经典" },
   ],
 }
 
