@@ -1,0 +1,378 @@
+/* Reading Page Styles */
+
+.reading-page {
+  padding: 24px;
+}
+
+.reading-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.reading-header h1 {
+  font-size: 24px;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.reading-stats {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.stat-total {
+  font-size: 14px;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.stat-item {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* Filters */
+.reading-filters {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.filter-group {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.filter-label {
+  font-size: 13px;
+  color: var(--text-muted);
+  width: 40px;
+}
+
+.filter-btn {
+  padding: 6px 12px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.filter-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.filter-btn.active {
+  background: var(--accent-bg);
+  border-color: var(--accent);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* Content Layout */
+.reading-content {
+  display: flex;
+  gap: 20px;
+}
+
+.book-list-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Book Card */
+.reading-book-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.reading-book-card:hover {
+  border-color: var(--accent);
+}
+
+.reading-book-card.selected {
+  border-color: var(--accent);
+  box-shadow: 0 0 12px var(--accent-bg);
+}
+
+.reading-book-card.待读 { border-left: 3px solid var(--text-muted); }
+.reading-book-card.在读 { border-left: 3px solid var(--accent); }
+.reading-book-card.已读 { border-left: 3px solid var(--success); }
+
+.book-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.book-info {
+  flex: 1;
+}
+
+.book-info .book-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.book-info .book-meta {
+  display: flex;
+  gap: 12px;
+}
+
+.book-info .book-author {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.book-info .book-domain {
+  font-size: 11px;
+  padding: 1px 6px;
+  background: var(--accent-bg);
+  color: var(--accent);
+  border-radius: 4px;
+}
+
+.book-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.status-badge {
+  font-size: 12px;
+  padding: 3px 8px;
+  border-radius: 8px;
+}
+
+.status-badge.待读 {
+  background: var(--bg-tertiary);
+  color: var(--text-muted);
+}
+
+.status-badge.在读 {
+  background: var(--accent-bg);
+  color: var(--accent);
+}
+
+.status-badge.已读 {
+  background: #66bb6a22;
+  color: var(--success);
+}
+
+.notes-count {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.book-status-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.status-btn {
+  flex: 1;
+  padding: 6px 10px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-muted);
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.status-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.status-btn.active {
+  background: var(--accent-bg);
+  border-color: var(--accent);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* Notes Panel */
+.notes-panel {
+  width: 400px;
+  min-width: 400px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+  position: sticky;
+  top: 20px;
+}
+
+.notes-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.notes-header h3 {
+  margin: 0;
+  font-size: 16px;
+  color: var(--text-primary);
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.close-btn:hover {
+  background: var(--hover-bg);
+  color: var(--text-primary);
+}
+
+/* Notes Input */
+.notes-input {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.notes-input textarea {
+  width: 100%;
+  padding: 12px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-size: 13px;
+  resize: vertical;
+}
+
+.notes-input textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.add-note-btn {
+  padding: 10px 16px;
+  background: var(--accent);
+  border: none;
+  border-radius: 8px;
+  color: #000;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.add-note-btn:hover {
+  opacity: 0.9;
+}
+
+/* Notes List */
+.notes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.no-notes {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 13px;
+  padding: 30px;
+}
+
+.note-card {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.note-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.note-time {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.delete-note-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 14px;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.delete-note-btn:hover {
+  background: var(--hover-bg);
+  color: var(--danger);
+}
+
+.note-text {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .reading-content {
+    flex-direction: column;
+  }
+
+  .notes-panel {
+    width: 100%;
+    min-width: unset;
+    position: static;
+  }
+}
+
+@media (max-width: 768px) {
+  .reading-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .reading-stats {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+}

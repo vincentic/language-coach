@@ -101,14 +101,16 @@ export default function HomePage() {
   const [progress, setProgress] = useState({})
   const [feedback, setFeedback] = useState('')
   const [feedbackLog, setFeedbackLog] = useState([])
+  const [bookStatus, setBookStatus] = useState({})
 
   useEffect(() => {
     loadData()
-    // Load saved progress from localStorage
     const saved = localStorage.getItem('learning-progress')
     if (saved) setProgress(JSON.parse(saved))
     const savedLog = localStorage.getItem('feedback-log')
     if (savedLog) setFeedbackLog(JSON.parse(savedLog))
+    const savedBooks = localStorage.getItem('book-status')
+    if (savedBooks) setBookStatus(JSON.parse(savedBooks))
   }, [])
 
   const loadData = async () => {
@@ -141,6 +143,12 @@ export default function HomePage() {
     setFeedbackLog(newLog)
     localStorage.setItem('feedback-log', JSON.stringify(newLog))
     setFeedback('')
+  }
+
+  const updateBookStatus = (bookTitle, status) => {
+    const newStatus = { ...bookStatus, [bookTitle]: status }
+    setBookStatus(newStatus)
+    localStorage.setItem('book-status', JSON.stringify(newStatus))
   }
 
   if (loading) {
@@ -311,6 +319,17 @@ export default function HomePage() {
                           <span className="book-level">{book.level}</span>
                         </div>
                         <div className="book-topic">{book.topic}</div>
+                        <div className="book-status-bar">
+                          {['待读', '在读', '已读'].map(status => (
+                            <button
+                              key={status}
+                              className={`book-status-btn ${bookStatus[book.title] === status ? 'active' : ''}`}
+                              onClick={() => updateBookStatus(book.title, status)}
+                            >
+                              {status === '待读' ? '📖' : status === '在读' ? '📘' : '✅'} {status}
+                            </button>
+                          ))}
+                        </div>
                       </div>
                     ))}
                   </div>
