@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useState, useEffect } from 'react'
 import './Sidebar.css'
 
 const NAV_ITEMS = [
@@ -14,6 +15,20 @@ const NAV_ITEMS = [
 
 export default function Sidebar() {
   const pathname = usePathname()
+  const [theme, setTheme] = useState('dark')
+
+  useEffect(() => {
+    const saved = localStorage.getItem('theme') || 'dark'
+    setTheme(saved)
+    document.documentElement.setAttribute('data-theme', saved)
+  }, [])
+
+  const toggleTheme = () => {
+    const next = theme === 'dark' ? 'light' : 'dark'
+    setTheme(next)
+    localStorage.setItem('theme', next)
+    document.documentElement.setAttribute('data-theme', next)
+  }
 
   return (
     <nav className="sidebar">
@@ -46,6 +61,9 @@ export default function Sidebar() {
       </div>
 
       <div className="sidebar-footer">
+        <button className="theme-toggle" onClick={toggleTheme} title={theme === 'dark' ? '切换白天模式' : '切换黑夜模式'}>
+          {theme === 'dark' ? '☀️' : '🌙'}
+        </button>
         <div className="version-info">v1.0.0</div>
       </div>
     </nav>

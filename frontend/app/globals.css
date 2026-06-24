@@ -1,4 +1,43 @@
-/* Global Styles */
+/* Global Styles with Theme Support */
+
+:root {
+  /* Dark Theme (default) */
+  --bg-primary: #0f0f1a;
+  --bg-secondary: #16213e;
+  --bg-tertiary: #1a1a3e;
+  --border: #2a2a4a;
+  --text-primary: #e0e0e0;
+  --text-secondary: #a0a0b0;
+  --text-muted: #666;
+  --accent: #4fc3f7;
+  --accent-bg: #4fc3f722;
+  --success: #66bb6a;
+  --warning: #ffd54f;
+  --danger: #ef5350;
+  --hover-bg: #252540;
+  --sidebar-bg: #1a1a2e;
+  --card-bg: #16213e;
+  --input-bg: #1a1a3e;
+}
+
+[data-theme="light"] {
+  --bg-primary: #f5f5f5;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #f0f0f0;
+  --border: #e0e0e0;
+  --text-primary: #1a1a2e;
+  --text-secondary: #555;
+  --text-muted: #999;
+  --accent: #1976d2;
+  --accent-bg: #1976d222;
+  --success: #4caf50;
+  --warning: #ff9800;
+  --danger: #f44336;
+  --hover-bg: #f0f0f0;
+  --sidebar-bg: #ffffff;
+  --card-bg: #ffffff;
+  --input-bg: #f5f5f5;
+}
 
 * {
   box-sizing: border-box;
@@ -11,8 +50,8 @@ body {
   max-width: 100vw;
   overflow-x: hidden;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  background: #0f0f1a;
-  color: #e0e0e0;
+  background: var(--bg-primary);
+  color: var(--text-primary);
 }
 
 .app-layout {
@@ -23,7 +62,7 @@ body {
 .main-content {
   flex: 1;
   min-width: 0;
-  background: #0f0f1a;
+  background: var(--bg-primary);
 }
 
 /* Scrollbar */
@@ -33,20 +72,20 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #1a1a2e;
+  background: var(--bg-secondary);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #3a3a5a;
+  background: var(--border);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #4a4a6a;
+  background: var(--text-muted);
 }
 
 /* Selection */
 ::selection {
-  background: #4fc3f733;
-  color: #fff;
+  background: var(--accent-bg);
+  color: var(--text-primary);
 }
