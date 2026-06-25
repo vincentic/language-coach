@@ -216,12 +216,12 @@
 
 /* Notes Panel */
 .notes-panel {
-  width: 400px;
-  min-width: 400px;
+  width: 500px;
+  min-width: 500px;
   background: var(--card-bg);
   border: 1px solid var(--border);
   border-radius: 12px;
-  padding: 20px;
+  padding: 24px;
   max-height: calc(100vh - 120px);
   overflow-y: auto;
   position: sticky;
@@ -266,13 +266,15 @@
 
 .notes-input textarea {
   width: 100%;
-  padding: 12px;
+  padding: 16px;
   background: var(--bg-tertiary);
   border: 1px solid var(--border);
   border-radius: 8px;
   color: var(--text-primary);
-  font-size: 13px;
+  font-size: 14px;
+  line-height: 1.6;
   resize: vertical;
+  min-height: 150px;
 }
 
 .notes-input textarea:focus {
@@ -314,19 +316,20 @@
   background: var(--bg-tertiary);
   border: 1px solid var(--border);
   border-radius: 8px;
-  padding: 12px;
+  padding: 16px;
 }
 
 .note-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
 .note-time {
-  font-size: 11px;
-  color: var(--text-muted);
+  font-size: 13px;
+  color: var(--accent);
+  font-weight: 500;
 }
 
 .delete-note-btn {
@@ -345,9 +348,9 @@
 }
 
 .note-text {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--text-secondary);
-  line-height: 1.6;
+  line-height: 1.7;
   margin: 0;
   white-space: pre-wrap;
 }
