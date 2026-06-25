@@ -87,18 +87,21 @@
 }
 
 .book-list-panel {
-  flex: 1;
+  width: 360px;
+  min-width: 360px;
+  max-height: calc(100vh - 200px);
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 
 /* Book Card */
 .reading-book-card {
   background: var(--card-bg);
   border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 14px;
+  border-radius: 8px;
+  padding: 10px 12px;
   cursor: pointer;
   transition: all 0.2s;
 }
@@ -119,37 +122,46 @@
 .book-main {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 10px;
+  align-items: center;
+  margin-bottom: 8px;
 }
 
 .book-info {
   flex: 1;
+  min-width: 0;
 }
 
 .book-info .book-title {
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 600;
   color: var(--text-primary);
-  margin-bottom: 4px;
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .book-info .book-meta {
   display: flex;
-  gap: 12px;
+  gap: 8px;
+  align-items: center;
 }
 
 .book-info .book-author {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .book-info .book-domain {
-  font-size: 11px;
-  padding: 1px 6px;
+  font-size: 10px;
+  padding: 1px 5px;
   background: var(--accent-bg);
   color: var(--accent);
   border-radius: 4px;
+  white-space: nowrap;
 }
 
 .book-right {
@@ -187,17 +199,17 @@
 
 .book-status-actions {
   display: flex;
-  gap: 6px;
+  gap: 4px;
 }
 
 .status-btn {
   flex: 1;
-  padding: 6px 10px;
+  padding: 4px 8px;
   background: var(--bg-tertiary);
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: 4px;
   color: var(--text-muted);
-  font-size: 11px;
+  font-size: 10px;
   cursor: pointer;
   transition: all 0.2s;
 }
@@ -216,8 +228,8 @@
 
 /* Notes Panel */
 .notes-panel {
-  width: 500px;
-  min-width: 500px;
+  flex: 1;
+  min-width: 0;
   background: var(--card-bg);
   border: 1px solid var(--border);
   border-radius: 12px;
@@ -377,9 +389,13 @@
     flex-direction: column;
   }
 
-  .notes-panel {
+  .book-list-panel {
     width: 100%;
     min-width: unset;
+    max-height: 300px;
+  }
+
+  .notes-panel {
     position: static;
   }
 }
