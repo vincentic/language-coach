@@ -8,13 +8,6 @@
   margin-bottom: 24px;
 }
 
-.summary-header-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 16px;
-}
-
 .summary-header h1 {
   font-size: 24px;
   color: var(--text-primary);
@@ -25,6 +18,84 @@
   font-size: 14px;
   color: var(--text-muted);
   margin: 0;
+}
+
+/* Domain Stats Bar */
+.domain-stats-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.domain-stat-btn {
+  padding: 6px 12px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.domain-stat-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.domain-stat-btn.active {
+  background: var(--accent-bg);
+  border-color: var(--accent);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.domain-count {
+  font-size: 10px;
+  opacity: 0.7;
+}
+
+/* Search Bar */
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.search-input {
+  flex: 1;
+  padding: 10px 16px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-size: 14px;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.search-count {
+  font-size: 13px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+/* Domain Group */
+.domain-group {
+  margin-bottom: 16px;
+}
+
+.domain-group-title {
+  margin: 0 0 8px 0;
+  font-size: 13px;
+  color: var(--accent);
+  padding: 4px 0;
+  border-bottom: 1px solid var(--border);
 }
 
 /* Regenerate */
