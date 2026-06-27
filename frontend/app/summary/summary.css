@@ -8,6 +8,13 @@
   margin-bottom: 24px;
 }
 
+.summary-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
 .summary-header h1 {
   font-size: 24px;
   color: var(--text-primary);
@@ -18,6 +25,45 @@
   font-size: 14px;
   color: var(--text-muted);
   margin: 0;
+}
+
+/* Regenerate */
+.regenerate-btn {
+  padding: 10px 20px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.regenerate-btn:hover {
+  border-color: var(--accent);
+  background: var(--accent-bg);
+}
+
+.regenerate-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.regen-progress {
+  margin-top: 12px;
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.regen-bar {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 2px;
+  transition: width 0.3s ease;
 }
 
 /* Today's Book */

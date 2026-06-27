@@ -36,6 +36,8 @@ export default function SummaryPage() {
   const [generating, setGenerating] = useState(false)
   const [extracting, setExtracting] = useState(false)
   const [todayBook, setTodayBook] = useState(null)
+  const [regenerating, setRegenerating] = useState(false)
+  const [regenProgress, setRegenProgress] = useState({ current: 0, total: 0 })
 
   useEffect(() => {
     const s = localStorage.getItem('book-summaries')
@@ -114,11 +116,84 @@ export default function SummaryPage() {
   const booksWithSummary = ALL_BOOKS.filter(b => summaries[b.title])
   const booksWithPrinciples = ALL_BOOKS.filter(b => principles[b.title]?.length)
 
+  // Regenerate all summaries and principles
+  const regenerateAll = async () => {
+    if (regenerating) return
+    setRegenerating(true)
+    // Clear existing data
+    setSummaries({})
+    setPrinciples({})
+    localStorage.removeItem('book-summaries')
+    localStorage.removeItem('book-principles')
+
+    const booksToProcess = ALL_BOOKS.slice(0, 20) // Process first 20 books
+    setRegenProgress({ current: 0, total: booksToProcess.length })
+
+    const newSummaries = {}
+    const newPrinciples = {}
+
+    for (let i = 0; i < booksToProcess.length; i++) {
+      const book = booksToProcess[i]
+      setRegenProgress({ current: i + 1, total: booksToProcess.length })
+
+      // Generate summary
+      try {
+        const sRes = await fetch('/api/qa/generate-summary', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ title: book.title, author: book.author, topic: book.topic })
+        })
+        const sData = await sRes.json()
+        newSummaries[book.title] = {
+          text: sData.summary,
+          date: new Date().toLocaleDateString('zh-CN'),
+          time: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })
+        }
+      } catch {}
+
+      // Extract principles
+      try {
+        const pRes = await fetch('/api/qa/extract-principles', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ title: book.title, author: book.author, topic: book.topic, summary: newSummaries[book.title]?.text || '' })
+        })
+        const pData = await pRes.json()
+        newPrinciples[book.title] = pData.principles || []
+      } catch {}
+
+      // Small delay to avoid rate limiting
+      await new Promise(r => setTimeout(r, 500))
+    }
+
+    setSummaries(newSummaries)
+    setPrinciples(newPrinciples)
+    localStorage.setItem('book-summaries', JSON.stringify(newSummaries))
+    localStorage.setItem('book-principles', JSON.stringify(newPrinciples))
+    setRegenerating(false)
+  }
+
   return (
     <div className="summary-page">
       <div className="summary-header">
-        <h1>📝 AI 读书总结 · 行动指南</h1>
-        <p className="summary-desc">每日一本书，AI 生成核心要点，提炼日常行动原则</p>
+        <div className="summary-header-top">
+          <div>
+            <h1>📝 AI 读书总结 · 行动指南</h1>
+            <p className="summary-desc">每日一本书，AI 生成核心要点，提炼日常行动原则</p>
+          </div>
+          <button
+            className="regenerate-btn"
+            onClick={regenerateAll}
+            disabled={regenerating}
+          >
+            {regenerating ? `⏳ 生成中 ${regenProgress.current}/${regenProgress.total}` : '🔄 重新生成全部'}
+          </button>
+        </div>
+        {regenerating && (
+          <div className="regen-progress">
+            <div className="regen-bar" style={{ width: `${(regenProgress.current / regenProgress.total) * 100}%` }} />
+          </div>
+        )}
       </div>
 
       {/* Today's Book */}
