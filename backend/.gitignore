@@ -1,0 +1,25 @@
+# Python virtual environment
+venv/
+include/
+bin/
+lib/
+pyvenv.cfg
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Environment variables (contains secrets)
+.env
+
+# Build artifacts
+*.egg-info/
+dist/
+build/
+
+# macOS
+.DS_Store
+
+# Uploads (user data)
+uploads/
