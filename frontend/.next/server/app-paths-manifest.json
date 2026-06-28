@@ -1,1 +1,9 @@
-{}
+{
+  "/page": "app/page.js",
+  "/knowledge/page": "app/knowledge/page.js",
+  "/reading/page": "app/reading/page.js",
+  "/summary/page": "app/summary/page.js",
+  "/report/page": "app/report/page.js",
+  "/network/page": "app/network/page.js",
+  "/practice/page": "app/practice/page.js"
+}
