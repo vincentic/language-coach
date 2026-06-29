@@ -11,6 +11,7 @@ const NAV_ITEMS = [
   { href: '/summary', label: '📝 AI总结', icon: '📝', description: 'AI Summaries' },
   { href: '/practice', label: '🎯 语言练习', icon: '🎯', description: 'Shadow Reading' },
   { href: '/knowledge', label: '🧠 知识网络', icon: '🧠', description: 'Knowledge Graph' },
+  { href: '/strength', label: '💎 职业优势', icon: '💎', description: 'Career Strengths' },
   { href: '/network', label: '🕸️ 网络架构', icon: '🕸️', description: 'Network View' },
   { href: '/report', label: '📊 分析报告', icon: '📊', description: 'Analytics' },
 ]
